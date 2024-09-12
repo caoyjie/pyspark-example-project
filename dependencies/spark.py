@@ -25,6 +25,10 @@ def start_spark(app_name='my_spark_app', master='local[*]', jar_packages=[],
     All other arguments exist solely for testing the script from within
     an interactive Python console.
 
+    在工作节点上启动 Spark 会话，并将 Spark 应用注册到集群中。请注意，当通过 
+    spark-submit 运行脚本时，只有 app_name 参数会生效。其他参数仅用于在交互式 Python 
+    控制台中测试脚本。
+
     This function also looks for a file ending in 'config.json' that
     can be sent with the Spark job. If it is found, it is opened,
     the contents parsed (assuming it contains valid JSON for the ETL job
@@ -33,6 +37,11 @@ def start_spark(app_name='my_spark_app', master='local[*]', jar_packages=[],
     this function. If the file cannot be found then the return tuple
     only contains the Spark session and Spark logger objects and None
     for config.
+
+    此函数还会查找以 'config.json' 结尾的文件，该文件可以与 Spark 作业一起发送。
+    如果找到该文件，函数会打开它，并假设文件中包含有效的 JSON 配置，用于 ETL 作业的配置参数。
+    文件内容将被解析为一个字典形式，并作为此函数返回的元组中的最后一个元素返回。如果找不到此文件，
+    则返回的元组仅包含 Spark 会话和 Spark 日志记录对象，配置文件部分为 None。
 
     The function checks the enclosing environment to see if it is being
     run from inside an interactive console session or from an
@@ -45,6 +54,12 @@ def start_spark(app_name='my_spark_app', master='local[*]', jar_packages=[],
     use local module imports, as opposed to those in the zip archive
     sent to spark via the --py-files flag in spark-submit.
 
+    该函数还会检查所在的环境，以确定它是否在交互式控制台会话中运行，
+    或是在设置了 DEBUG 环境变量的环境中运行（例如，在 IDE（如 Visual Studio Code 或 
+    PyCharm）的调试配置中，将 DEBUG=1 设置为环境变量）。在这种情况下，函数将使用所有可用的函数参数，
+    从本地 PySpark 包启动一个 PySpark 驱动程序，而不是使用 spark-submit 和 Spark 集群的默认配置。
+    同时，该函数将使用本地模块导入，而不是通过 spark-submit 发送的 --py-files 标志中的 zip 文件中的模块。
+    
     :param app_name: Name of Spark app.
     :param master: Cluster connection details (defaults to local[*]).
     :param jar_packages: List of Spark JAR package names.
