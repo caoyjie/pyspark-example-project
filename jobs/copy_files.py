@@ -2,8 +2,14 @@ import os
 import shutil
 from concurrent.futures import ThreadPoolExecutor
 
-# 定义拷贝文件的函数
+
 def copy_file(src_file, dest_file):
+    """拷贝文件的函数
+
+    Args:
+        src_file (string): 原始文件路径
+        dest_file (string): 目标文件路径
+    """
     try:
         # 确保是文件
         if os.path.isfile(src_file):
@@ -13,8 +19,13 @@ def copy_file(src_file, dest_file):
     except Exception as e:
         print(f"Error copying {src_file}: {e}")
 
-# 定义拷贝目录的函数
 def copy_directory(src_dir, dest_dir):
+    """拷贝目录的函数
+
+    Args:
+        src_dir (string): 原始文件夹路径
+        dest_dir (string): 目标文件夹路径
+    """
     # 创建目标目录，如果不存在
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)
